@@ -1,0 +1,25 @@
+type List @model {
+  post_id: ID!
+  title: String
+  name: String
+  content: String
+  address: String
+  categories: String
+  phone: String
+  cover: String
+  logo: String
+  website: String
+  email: String
+  featured: Int
+  geo_lat: String
+  geo_long: String
+}
+
+type Categories @model {
+  term_id: ID!
+  name: String
+  slug: String
+  parent: String
+  count: Int
+  image: String
+}

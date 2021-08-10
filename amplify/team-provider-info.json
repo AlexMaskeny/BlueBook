@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-bluebook-dev-135545-authRole",
+      "UnauthRoleArn": "arn:aws:iam::296672234546:role/amplify-bluebook-dev-135545-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::296672234546:role/amplify-bluebook-dev-135545-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-bluebook-dev-135545-deployment",
+      "UnauthRoleName": "amplify-bluebook-dev-135545-unauthRole",
+      "StackName": "amplify-bluebook-dev-135545",
+      "StackId": "arn:aws:cloudformation:us-east-1:296672234546:stack/amplify-bluebook-dev-135545/e1df8180-f3ba-11eb-996b-0e3edd8361ed",
+      "AmplifyAppId": "d3atn112z0bz7u"
+    }
+  }
+}
