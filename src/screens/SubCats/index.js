@@ -36,11 +36,11 @@ function index({navigation, route}) {
             data: result.data.getCategoriesByParent.categories,
             date: Date.now()
           }));
-          //setRefresh(false);
+          setRefresh(false);
         }
       } else {
         setData("Disconnected");
-        //setRefresh(false);
+        setRefresh(false);
       }
     } catch (error) {
       console.log(error);

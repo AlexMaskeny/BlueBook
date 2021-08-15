@@ -12,6 +12,7 @@ import NetInfo from '@react-native-community/netinfo';
 import API from '@aws-amplify/api';
 import { listLists } from '../../graphql/queries';
 import NoConnection from '../../components/blocks/NoConnection';
+import NoResults from '../../components/blocks/NoResults';
 import Post from '../../components/blocks/Post';
 
 function index({navigation, route}) {
@@ -69,7 +70,6 @@ function index({navigation, route}) {
       console.log(error);
     }
     setRefresh(false);
-    //console.log(data);
   }
   useEffect(()=> {
     onInitial();
@@ -84,21 +84,36 @@ function index({navigation, route}) {
           }
         ]}
         style={{width: '100%'}}
+        ListHeaderComponent={()=> (
+            <>
+              {data != "Disconnected" && 
+              <>
+                {(data.length < 1 && refresh != true) &&
+                  <>
+                    <NoResults />
+                  </>
+                }
+              </>
+              }
+            </>
+          )
+        }
         keyExtractor={(listing)=>listing.id.toString()}
         refreshing={refresh}
         onRefresh={onRefresh}
         renderItem={({item})=> {
           //console.log(item)
-          const image = (item.cover ? item.cover : route.params.parent.image);
-          const content = (item.content.length > 0 ? item.content : (item.website.length > 0 ? item.website.slice(7) : item.phone))
           if (item.id == "1") {
             return (
               <NoConnection />
-            )
-          } else {
+              )
+            } else {
+            const image = (item.cover ? item.cover : route.params.parent.image);
+            const content = (item.content.length > 0 ? item.content : (item.website.length > 0 ? item.website.slice(7) : item.phone))
+            const logo = (item.logo.length > 0 ? "https://bluebooklocal.com"+item.logo : false);
             return (
-              <TouchableOpacity onPress={()=>console.log(item)}>
-                <Post cover={"https://bluebooklocal.com"+image} name={item.title} icon={route.params.parent.icon} category={route.params.parent.name} content={content}/>
+              <TouchableOpacity onPress={()=>navigation.navigate("Listing", {backData: route.params.backData, mainCat: route.params.mainCat, parent: route.params.parent, item: {...item, image: image}})}>
+                <Post cover={"https://bluebooklocal.com"+image} name={item.title} icon={route.params.parent.icon} logo={logo} category={route.params.parent.name} content={content}/>
               </TouchableOpacity>
             )
           }

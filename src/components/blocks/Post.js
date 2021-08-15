@@ -28,7 +28,7 @@ function Post({cover, name, icon, category, logo, content}) {
             </View>
         </View>
         {logo &&
-            <Image style={{borderRadius: 100, height: 80, width: 80, position: "absolute", borderColor: globalColors.background1, borderWidth: 3, left: 20, bottom: 120}} uri={logo} />
+            <Image style={{borderRadius: 100, height: 80, width: 80, position: "absolute", backgroundColor: globalColors.background1, borderColor: globalColors.background1, borderWidth: 3, left: 20, bottom: 120}} uri={logo} />
         }
     </View>
   );

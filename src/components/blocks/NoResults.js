@@ -6,13 +6,13 @@ import Title from '../text/Title';
 import SubTitle from '../text/SubTitle';
 import Button from '../buttons/Button';
 
-function NoConnection() {
+function NoResults() {
   return (
     <View style={styles.container}>
-        <MaterialCommunityIcons name="transit-connection-variant" size={100} color={globalColors.primary} />
-        <Title>No Connection?</Title>
-        <SubTitle>You seem to be disconnected</SubTitle>
-        <SubTitle>from the internet.</SubTitle>
+        <MaterialCommunityIcons name="emoticon-frown" size={100} color={globalColors.primary} />
+        <Title>No Results Found</Title>
+        <SubTitle>We didn't find any listings</SubTitle>
+        <SubTitle>for this search / category</SubTitle>
     </View>
   );
 }
@@ -26,4 +26,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default NoConnection;
+export default NoResults;
