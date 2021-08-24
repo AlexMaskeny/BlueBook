@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Image, TouchableWithoutFeedback} from 'react-native';
 
 import globalStyles from '../../config/globalStyles';
@@ -9,7 +9,7 @@ import SubTitle from '../../components/text/SubTitle';
 import IconButton from '../../components/buttons/IconButton';
 import SearchModal from './searchModal';
 
-function topBar(props) {
+function topBar({data, navigation, route}) {
   const [active, setActive] = useState(false);
   return (
     <>    
@@ -23,7 +23,7 @@ function topBar(props) {
             </View>
         </TouchableWithoutFeedback>
     </View>
-    <SearchModal active={active} setActive={setActive} />
+    <SearchModal active={active} setActive={setActive} data={data} navigation={navigation}/>
     </>
   );
 }

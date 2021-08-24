@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList, View, TouchableOpacity} from 'react-native';
 
 import globalStyles from '../../config/globalStyles';
@@ -10,46 +10,29 @@ import TopBar from './TopBar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 import API from '@aws-amplify/api';
-import { listLists } from '../../graphql/queries';
+import { getListsById } from '../../graphql/queries';
 import NoConnection from '../../components/blocks/NoConnection';
 import NoResults from '../../components/blocks/NoResults';
 import Post from '../../components/blocks/Post';
 
 function index({navigation, route}) {
   const [data, setData] = useState([]);
-  const fullData = useRef([]);
-  const makeData = (newData) => {
-    setData(newData.slice(0, 6));
-    fullData.current = newData;
-  }
   const [refresh, setRefresh] = useState(false);
-  const onRefresh = async () => {
+  const getData = async (ids) => {
     setRefresh(true);
     //console.log("Hi2")
     try {
       const netInfo = await NetInfo.fetch();
       if (netInfo.isConnected) {
-        const result = await API.graphql({
-          query: listLists, variables: {
-            filter: {
-              categories: {
-                contains: route.params.parent.id,
-              }
-            }
-          }
-        })
+        //get the RESULT which is a query of listallitems with id = ids
         if (result) {
-          //console.log(result);
-          const items = result.data.listLists.items;
-          items.sort(function(a, b){
-            return b.featured-a.featured;
+          const result = await API.graphql({
+            query: getListsById, variables: {
+              ids: ids,
+            }
           })
-          //console.log(items);
-          makeData(items);
-          await AsyncStorage.setItem("listings"+route.params.parent.id, JSON.stringify({
-            data: items,
-            date: Date.now()
-          }))
+          console.log(result);
+          setData(result.data.getListsById.items);
           setRefresh(false);
         }
       } else {
@@ -63,18 +46,11 @@ function index({navigation, route}) {
   const onInitial = async () => {
     setRefresh(true);
     try {
-      const data = await AsyncStorage.getItem("listings"+route.params.parent.id);
+      const data = await AsyncStorage.getItem("favorites");
       const parsed = JSON.parse(data);
       //console.log(parsed);
-      if (!parsed) {
-        onRefresh();
-      } else {
-        if (Date.now() - parsed.date > 3600000) {
-          AsyncStorage.removeItem("listings"+route.params.parent.id);
-          onRefresh();
-        } else {
-          makeData(parsed.data);
-        }
+      if (parsed) {
+        getData(parsed);
       }
     } catch (error) {
       console.log(error);
@@ -86,7 +62,7 @@ function index({navigation, route}) {
   }, [])
   return (
     <Screen style={styles.page}>
-      <TopBar navigation={navigation} route={route}/>
+      <TopBar/>
       <FlatList 
         data={data != "Disconnected" ? data : [
           {
@@ -94,11 +70,6 @@ function index({navigation, route}) {
           }
         ]}
         style={{width: '100%'}}
-        onEndReachedThreshold={0.3}
-        onEndReached={()=>{
-          setData(fullData.current.slice(0,data.length+6));
-          //console.log("end");
-        }}
         ListHeaderComponent={()=> (
             <>
               {data != "Disconnected" && 
@@ -128,7 +99,7 @@ function index({navigation, route}) {
             const logo = (item.logo.length > 0 ? "https://bluebooklocal.com"+item.logo : false);
             return (
               <TouchableOpacity onPress={()=>navigation.navigate("Listing", {backData: route.params.backData, mainCat: route.params.mainCat, parent: route.params.parent, item: {...item, image: image}})}>
-                <Post cover={"https://bluebooklocal.com"+image} name={item.title} icon={route.params.parent.icon} logo={logo} category={route.params.parent.name} content={content} id={item.id} />
+                <Post cover={"https://bluebooklocal.com"+image} name={item.title} icon={route.params.parent.icon} logo={logo} category={route.params.parent.name} content={content}/>
               </TouchableOpacity>
             )
           }

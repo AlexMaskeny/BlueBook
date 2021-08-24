@@ -14,7 +14,12 @@ function topBar({navigation, route}) {
     <>    
     <View style={styles.topBar1}>
         <View style={{width: 50}}>
-            <IconButton Material={true} color={globalColors.background1} size={34} icon='arrow-back-ios' onPress={()=>navigation.navigate("MainCats", {initialData: route.params.backData})}/>
+            <IconButton Material={true} color={globalColors.background1} size={34} icon='arrow-back-ios' onPress={()=>{
+              navigation.navigate("MainCats", {initialData: route.params.backData});
+              if (route.params.fromSearch) {
+                route.params.setActive(true);
+              }
+            }}/>
         </View>
         <Title size={18} color={globalColors.background1}>{route.params.parent.name}</Title>
         <TouchableOpacity onPress={()=>navigation.navigate("MainCats", {initialData: route.params.backData})}>

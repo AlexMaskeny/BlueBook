@@ -25,6 +25,26 @@ export const getList = /* GraphQL */ `
   }
 `;
 
+export const getListsById = /* GraphQL */ `
+  query getListsById($ids: [ID]!) {
+    getListsById(ids: $ids) {
+      id
+      post_id
+      title
+      name
+      content
+      address
+      categories
+      phone
+      cover
+      logo
+      website
+      email
+      featured
+    }
+  }
+`
+
 export const listLists = /* GraphQL */ `
   query ListLists(
     $filter: ModelListFilterInput

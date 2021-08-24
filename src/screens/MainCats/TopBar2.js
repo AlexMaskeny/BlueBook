@@ -18,6 +18,7 @@ import Title from '../../components/text/Title';
 function topBar({setActive, setListings, setCategories, loading, setLoading}) {
   const inputRef = useRef();
   const lastInput = useRef("");
+  const currentInput = useRef("");
   useEffect(()=>{
     inputRef.current.focus();
   })
@@ -29,7 +30,7 @@ function topBar({setActive, setListings, setCategories, loading, setLoading}) {
         <View style={{width: 10}} />
             <View style={styles.searchButton}>
                 <AppTextInput
-                  onChangeText={(text) => functions.getData(text, lastInput, setListings, setCategories, loading, setLoading)}
+                  onChangeText={(text) => functions.getData(text, lastInput, currentInput, setListings, setCategories, loading, setLoading)}
                   autoCapitalize="none"
                   placeholder="What are you looking for?"
                   reference={inputRef}

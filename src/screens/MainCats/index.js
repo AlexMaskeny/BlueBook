@@ -59,7 +59,7 @@ function index({navigation, route}) {
   }
   return (
     <Screen style={styles.page}>
-      <TopBar1 />
+      <TopBar1 data={data} navigation={navigation} route={route}/>
       <View style={styles.container}>
         <FlatList 
           data={data != "Disconnected" ? data : [

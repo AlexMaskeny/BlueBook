@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {View, FlatList, TouchableOpacity} from 'react-native';
 
 import globalStyles from '../../config/globalStyles';
@@ -17,7 +17,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function index({navigation, route}) {
   const [data, setData] = useState([]);
+  const fullData = useRef([]);
   const [refresh, setRefresh] = useState(false);
+  const makeData = (newData) => {
+    setData(newData.slice(0, 6));
+    fullData.current = newData;
+  }
   const onRefresh = async () => {
     setRefresh(true);
     //console.log(route.params.parent);
@@ -31,16 +36,16 @@ function index({navigation, route}) {
         })
         if (result) {
           //console.log(result.data.getCategoriesByParent.categories);
-          setData(result.data.getCategoriesByParent.categories);
+          makeData(result.data.getCategoriesByParent.categories);
           await AsyncStorage.setItem("subCat"+route.params.parent.id, JSON.stringify({
             data: result.data.getCategoriesByParent.categories,
             date: Date.now()
           }));
-          //setRefresh(false);
+          setRefresh(false);
         }
       } else {
         setData("Disconnected");
-        //setRefresh(false);
+        setRefresh(false);
       }
     } catch (error) {
       console.log(error);
@@ -61,7 +66,7 @@ function index({navigation, route}) {
           onRefresh(); 
           //console.log("Data Expired")
         } else {
-          setData(parsed.data);
+          makeData(parsed.data);
           //console.log("Had Data")
         }
       }
@@ -89,6 +94,10 @@ function index({navigation, route}) {
           <View style={{alignItems: "center", flex: 1, paddingTop: 10}}><Title>{data != "Disconnected" && "Related Categories"}</Title></View>
         }
         refreshing={refresh}
+        onEndReached={()=>{
+          setData(fullData.current.slice(0,data.length+6));
+          //console.log("end");
+        }}
         onRefresh={onRefresh}
         renderItem={({item})=> {
           const image = (item.image ? item.image : route.params.parent.image)

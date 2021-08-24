@@ -6,8 +6,9 @@ const onPress = () => {
     console.log("onPress");
 }
 
-const getData = async (input, lastInput, setListings, setCategories, loading, setLoading) => {
-    if (!loading) {
+const getData = async (input, lastInput, currentInput, setListings, setCategories, loading, setLoading) => {
+    currentInput.current = input;
+    //if (!loading) {
         setLoading(true)
         if (lastInput.current != input) {
             if (input.length == 0) {
@@ -41,10 +42,18 @@ const getData = async (input, lastInput, setListings, setCategories, loading, se
                                 }
                             }
                         })
-                        if (lastInput.current.length != 0 ) {
-                            setListings(result.data.listLists.items.slice(0, 6));
-                            setCategories(result2.data.listCategoriess.items.slice(0,3));
-                            //console.log(result2.data.listCategoriess.items.slice(0,3))
+                        console.log("Input:" + input);
+                        console.log("currentInput:" + currentInput.current);
+                        if (currentInput.current != 0 ) {
+                            if (currentInput.current != input) {
+                                setLoading(false);
+                                await getData(currentInput.current, lastInput, currentInput, setListings, setCategories, loading, setLoading);
+                            } else {
+                                setListings(result.data.listLists.items.slice(0, 6));
+                                setCategories(result2.data.listCategoriess.items.slice(0,3));
+                                setLoading(false);
+                                
+                            }
                         } else {
                             setListings([]);
                             setCategories([]);
@@ -59,7 +68,7 @@ const getData = async (input, lastInput, setListings, setCategories, loading, se
             }
         }
         setLoading(false);
-    } 
+    //} 
     lastInput.current = input;
 }
 

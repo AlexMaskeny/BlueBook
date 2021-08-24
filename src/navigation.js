@@ -14,6 +14,7 @@ import API from '@aws-amplify/api';
 import { getCategoriesByParent } from './graphql/queries';
 import NetInfo from "@react-native-community/netinfo";
 import Listings from './screens/Listings/index';
+import Listing from './screens/Listing/index';
 
 function navigation() {
     const getInitialData = async () => {
@@ -52,15 +53,15 @@ function navigation() {
                 inactiveTintColor: globalColors.text1,
                 tabBarShowLabel: false,
                 tabBarStyle: {
-                    height: globalStyles.footerHeight,
+                    height: globalStyles.footerHeight/2,
                     backgroundColor: globalColors.background1,
                     alignItems: "center",
                     justifyContent: "center",
                 }
             }}
         >
-            <GeneralTab.Screen name="Explore" initialParams={{initialData: initialData.current}} component={ExploreStackNavigator} options={({ navigation }) => ({tabBarIcon: ({color}) => <TabBarButton icon="search" Ioni={true} color={color} size={42} onPress={() => navigation.navigate("Explore", {initialData: initialData.current})}/>})} />
-            <GeneralTab.Screen name="Bookmarks" component={testScreen} options={({ navigation }) => ({tabBarIcon: ({color}) => <TabBarButton icon="heart-outline" color={color} size={42} onPress={() => navigation.navigate("Bookmarks")}/>})} />
+            <GeneralTab.Screen name="Explore" initialParams={{initialData: initialData.current}} component={ExploreStackNavigator} options={({ navigation }) => ({tabBarIcon: ({color}) => <TabBarButton icon="search" Ioni={true} color={globalColors.background1} size={42} /> })} />
+            <GeneralTab.Screen name="Bookmarks" component={testScreen} options={({ navigation }) => ({tabBarIcon: ({color}) => <TabBarButton icon="heart-outline" color={globalColors.background1} size={42} /> })} />
         </GeneralTab.Navigator>
     )
     const ExploreStack = createStackNavigator();
@@ -73,6 +74,7 @@ function navigation() {
             <ExploreStack.Screen name="MainCats" initialParams={{initialData: initialData.current}} component={MainCats} />
             <ExploreStack.Screen name="SubCats" component={SubCats} />
             <ExploreStack.Screen name="Listings" component={Listings} />
+            <ExploreStack.Screen name="Listing" component={Listing} />
         </ExploreStack.Navigator>
     )
   return (

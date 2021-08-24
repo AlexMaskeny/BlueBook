@@ -2,13 +2,13 @@
   "expo": {
     "name": "BlueBook",
     "slug": "BlueBook",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/WhiteBackground.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/Loading.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#004990"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -17,16 +17,17 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bluebooklocal.bluebook"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/WhiteBackground.png",
         "backgroundColor": "#FFFFFF"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/WhiteBackground.png"
     }
   }
 }

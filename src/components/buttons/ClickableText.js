@@ -1,8 +1,8 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 
-import SubTitle from "../Text/SubTitle";
-import Title from "../Text/Title";
+import SubTitle from "../text/SubTitle";
+import Title from "../text/Title";
 
 function ClickableText({title, onPress, style, type, ...otherProps}) {
   return (
