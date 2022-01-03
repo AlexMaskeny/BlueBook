@@ -2,8 +2,8 @@
   "expo": {
     "name": "BlueBook",
     "slug": "BlueBook",
-    "version": "1.0.1",
-    "orientation": "portrait",
+    "version": "1.1.1",
+    "orientation": "default",
     "icon": "./assets/WhiteBackground.png",
     "splash": {
       "image": "./assets/Loading.png",
@@ -18,7 +18,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.bluebooklocal.bluebook"
+      "bundleIdentifier": "com.bluebooklocal.bluebook",
+      "buildNumber": "1"
     },
     "android": {
       "adaptiveIcon": {

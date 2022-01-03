@@ -1,12 +1,10 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {FlatList, TouchableOpacity, View} from 'react-native';
 
+import appNav from '../../appNav';
 import API from '@aws-amplify/api';
 import {getCategoriesByParent} from '../../graphql/queries';
-import globalStyles from '../../config/globalStyles';
-import globalColors from '../../config/globalColors';
 import styles from './styles';
-import functions from './functions';
 import Screen from '../../components/general/Screen';
 import TopBar1 from './TopBar1';
 import Title from '../../components/text/Title';
@@ -30,7 +28,17 @@ const icons = {
 }
 
 function index({navigation, route}) {
-  const [data, setData] = useState(route.params.initialData);
+  const [data, makeData] = useState(route.params.initialData);
+  const setData = (newData) => {
+    const Data = newData.sort((a,b)=> {
+      if (a.name > b.name) {
+        return 1;
+      } else {
+        return -1;
+      }
+    })
+    makeData(Data);
+  }
   const [refresh, setRefresh] = useState(false);
   const onRefresh = async () => {
     setRefresh(true);
@@ -76,7 +84,7 @@ function index({navigation, route}) {
           renderItem={({item})=> {
             if (icons[item.id]) {
               return (
-                <TouchableOpacity onPress={()=>navigation.navigate("SubCats", {backData: data, parent: {...item, icon: icons[item.id]}})}>
+                <TouchableOpacity onPress={()=>appNav.nav(navigation,route,"MainCats","SubCats",{item: {...item, icon: icons[item.id]}})}>
                   <Category image={"https://www.bluebooklocal.com"+item.image} icon={icons[item.id]} name={item.name} numListings={item.count}/>
                 </TouchableOpacity>
               )

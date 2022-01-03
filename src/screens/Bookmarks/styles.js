@@ -4,15 +4,15 @@ import globalStyles from "../../config/globalStyles";
 
 const styles = StyleSheet.create({
     page: {
-        
+
     },
     topBar1: {
         height: globalStyles.headerHeight,
         backgroundColor: globalColors.primary,
-        padding: 10,
+        padding: 5,
         alignItems: "center",
-        flexDirection: "row",
-        justifyContent: "space-between"
+        justifyContent: 'center',
+        marginBottom: 10,
     },
 });
 

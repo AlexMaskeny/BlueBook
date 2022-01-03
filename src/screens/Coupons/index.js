@@ -6,11 +6,13 @@ import styles from './styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 import API from '@aws-amplify/api';
-import { listLists } from '../../graphql/queries';
+import { getCoupons, listLists } from '../../graphql/queries';
 import NoConnection from '../../components/blocks/NoConnection';
 import Post from '../../components/blocks/Post';
-import Spinner from 'react-native-loading-spinner-overlay';
 import Category from '../../components/blocks/Category';
+import TopBar from './TopBar';
+import Spinner from 'react-native-loading-spinner-overlay';
+import Screen from '../../components/general/Screen';
 
 function index({navigation, route}) {
   const [data, setData] = useState([]);
@@ -36,23 +38,19 @@ function index({navigation, route}) {
       const netInfo = await NetInfo.fetch();
       if (netInfo.isConnected) {
         const result = await API.graphql({
-          query: listLists, variables: {
-            filter: {
-              categories: {
-                contains: route.params.parent.id,
-              }
-            }
+          query: getCoupons, variables: {
+            type: "coupon"
           }
         })
         if (result) {
           //console.log(result);
-          const items = result.data.listLists.items;
+          const items = result.data.getCoupons.listings;
           items.sort(function(a, b){
             return b.featured-a.featured;
           })
           //console.log(items);
           makeData(items);
-          await AsyncStorage.setItem("listings"+route.params.parent.id, JSON.stringify({
+          await AsyncStorage.setItem("coupons", JSON.stringify({
             data: items,
             date: Date.now()
           }))
@@ -70,14 +68,14 @@ function index({navigation, route}) {
     console.log(refresh);
     setRefresh(true);
     try {
-      const data = await AsyncStorage.getItem("listings"+route.params.parent.id);
+      const data = await AsyncStorage.getItem("coupons");
       const parsed = JSON.parse(data);
       //console.log(parsed);
       if (!parsed) {
         onRefresh();
       } else {
         if (Date.now() - parsed.date > 3600000) {
-          AsyncStorage.removeItem("listings"+route.params.parent.id);
+          AsyncStorage.removeItem("coupons");
           onRefresh();
         } else {
           makeData(parsed.data);
@@ -92,10 +90,11 @@ function index({navigation, route}) {
     onInitial();
   }, [])
   return (
-    <View style={styles.page}>
-      <Spinner 
+    <Screen style={styles.page}>
+       <Spinner 
         visible={loading}
       />
+      <TopBar />
       <FlatList 
         data={data != "Disconnected" ? data : [
           {
@@ -118,35 +117,19 @@ function index({navigation, route}) {
               <NoConnection />
               )
             } else {
-            const image = (item.cover ? item.cover : route.params.parent.image);
-            const content = (item.content.length > 0 ? item.content : (item.website.length > 0 ? item.website.slice(7) : item.phone))
-            const logo = (item.logo.length > 0 ? "https://bluebooklocal.com"+item.logo : false);
-
-            if (item.type == "place") {
               return (
                 <TouchableOpacity onPress={async ()=>{
-                   setLoading(true);
-                   await appNav.nav(navigation, route, "Listings", "Listing", {item: {...item, image: image}})
-                   setLoading(false);
-                }}>
-                  <Post cover={"https://bluebooklocal.com"+image} name={item.title} icon={route.params.parent.icon} logo={logo} category={route.params.parent.name} content={content} id={item.id}/>
-                </TouchableOpacity>
-              )
-            } else {
-              return (
-                <TouchableOpacity onPress={async ()=>{
-                    setLoading(true);
-                    await appNav.nav(navigation, route, "Listings", "Coupon", {item: {...item, image: image}})
-                    setLoading(false);
+                  setLoading(true);
+                  await appNav.nav(navigation,route,"CoupListings","cCoupon",{item: item});
+                  setLoading(false);
                 }}>
                   <Category image={"https://www.bluebooklocal.com"+item.cover}  name={item.title} />
                 </TouchableOpacity>
               )
             }
-          }
         }}
       />
-    </View>
+    </Screen>
   );
 }
 

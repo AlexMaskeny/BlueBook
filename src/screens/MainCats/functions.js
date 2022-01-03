@@ -29,6 +29,9 @@ const getData = async (input, lastInput, currentInput, setListings, setCategorie
                                 filter: {
                                     search: {
                                         contains: input
+                                    },
+                                    type: {
+                                        eq: "place"
                                     }
                                 },
                             }
@@ -42,8 +45,8 @@ const getData = async (input, lastInput, currentInput, setListings, setCategorie
                                 }
                             }
                         })
-                        console.log("Input:" + input);
-                        console.log("currentInput:" + currentInput.current);
+                        //console.log("Input:" + input);
+                        //console.log("currentInput:" + currentInput.current);
                         if (currentInput.current != 0 ) {
                             if (currentInput.current != input) {
                                 setLoading(false);

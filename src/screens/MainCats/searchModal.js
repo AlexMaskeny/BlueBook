@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import { View, StyleSheet, Modal, FlatList, TouchableOpacity, TouchableHighlight, ActivityIndicator, KeyboardAvoidingView, Alert } from 'react-native';
+import { View, StyleSheet, Modal, FlatList, TouchableOpacity, TouchableHighlight, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
+import { Image } from 'react-native-expo-image-cache';
 import Screen from '../../components/general/Screen';
 import Title from '../../components/text/Title';
 import TopBar from './TopBar2';
@@ -8,6 +9,7 @@ import Spacer from '../../components/general/Spacer';
 import globalColors from '../../config/globalColors';
 import IconCircle from '../../components/blocks/IconCircle';
 import NetInfo from '@react-native-community/netinfo';
+import appNav from '../../appNav';
 import { getCategories } from '../../graphql/queries';
 import API from '@aws-amplify/api';
 
@@ -25,26 +27,6 @@ const icons = {
     "112": "home-group",
     "536": "account-group",
   }
-
-const getParentImage = async (cats) => {
-    try {
-        const netInfo = await NetInfo.fetch()
-        if(netInfo.isConnected) {
-            const result = await API.graphql({
-                query: getCategories, variables: {
-                    id: cats.slice(cats.indexOf("s:")+4, cats.indexOf(";", cats.indexOf("s:")+3))
-                }
-            })
-            if (result) {
-                return result.data.getCategories.cover;
-            }
-        } else {
-            
-        }
-    } catch (error) {
-        console.log(error);
-    }
-}
 
 function searchModal({active, setActive, data, navigation}) {
     const [listings, setListings] = useState([]);
@@ -138,10 +120,10 @@ function searchModal({active, setActive, data, navigation}) {
                                     return (
                                         <TouchableOpacity onPress={()=>{
                                             if (item.parent == 0) {
-                                                navigation.navigate("SubCats", {backData: data, fromSearch: "Yes", parent: {...item, icon: icons[item.id]}});
+                                                appNav.nav(navigation, {}, "Search", "SubCats", {item: {...item, icon: icons[item.id]}})
                                                 setActive(false);
                                             } else {
-                                                navigation.navigate("Listings", {backData: data, parent: {...item, icon: icons[item.parent]}});
+                                                appNav.nav(navigation, {}, "Search", "Listings", {item: {...item, icon: icons[item.parent]}});
                                                 setActive(false);
                                             }
                                         }}>
@@ -162,17 +144,17 @@ function searchModal({active, setActive, data, navigation}) {
                     renderItem={({item})=> {
                         return (
                             <TouchableOpacity onPress={async ()=>{
-                                if (item.cover.length > 0) {
-                                    navigation.navigate("Listing", {backData: data, item: {...item, image: item.cover}});
-                                    setActive(false);
-                                } else {
-                                    const cover = await getParentImage(item.categories);
-                                    navigation.navigate("Listing", {backData: data, item: {...item, image: cover}})
-                                    setActive(false);
-                                }
+                                console.log(item);
+                                await appNav.nav(navigation,{},"Search","Listing",{item: item})
+                                setActive(false);
                             }}>
                                 <View style={styles.searchListing}>
-                                    <IconCircle color={globalColors.text1} icon="google-maps" width={58} size={40}/>
+                                    {item.logo.length < 1 &&
+                                        <IconCircle color={globalColors.text1} icon="google-maps" width={58} size={40}/>
+                                    }
+                                    {item.logo.length > 0 &&
+                                        <Image style={{borderRadius: 100, height: 62, width: 62, backgroundColor: globalColors.background1, borderColor: globalColors.background1, borderWidth: 3,}} uri={"https://bluebooklocal.com"+item.logo} />
+                                    }
                                     <View style={{width: 10}}/>
                                     <Title color={globalColors.text1} style={{flex: 1}} numberOfLines={1} size={20}>{item.title}</Title>
                                 </View>

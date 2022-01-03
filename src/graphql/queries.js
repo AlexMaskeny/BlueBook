@@ -1,11 +1,62 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const getCoupons = /* GraphQL */ `
+  query GetCoupons($type: String!) {
+    getCoupons(type: $type) {
+      listings {
+        id
+        title
+        name
+        type
+        location
+        client_id
+        content
+        address
+        categories
+        phone
+        cover
+        logo
+        website
+        email
+        featured
+      }
+    }
+  }
+`;
+
+export const getListsByClient = /* GraphQL */ `
+  query GetListingsByClient($clientId: String!) {
+    getListingsByClient(clientId: $clientId) {
+      listings {
+        id
+        title
+        name
+        type
+        location
+        client_id
+        content
+        address
+        categories
+        phone
+        cover
+        logo
+        website
+        email
+        featured
+      }
+    }
+  }
+`;
+
 export const getList = /* GraphQL */ `
   query GetList($id: ID!) {
     getList(id: $id) {
       id
       post_id
+      type
+      location
+      client_id
       title
       name
       content
@@ -29,9 +80,11 @@ export const getListsById = /* GraphQL */ `
   query getListsById($ids: [ID]!) {
     getListsById(ids: $ids) {
       id
-      post_id
       title
       name
+      type
+      location
+      client_id
       content
       address
       categories
@@ -56,6 +109,9 @@ export const listLists = /* GraphQL */ `
         id
         title
         name
+        type
+        location
+        client_id
         content
         address
         categories

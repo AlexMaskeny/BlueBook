@@ -32,6 +32,8 @@ function topBar({setActive, setListings, setCategories, loading, setLoading}) {
                 <AppTextInput
                   onChangeText={(text) => functions.getData(text, lastInput, currentInput, setListings, setCategories, loading, setLoading)}
                   autoCapitalize="none"
+                  autoCorrect={false}
+                  autoCompleteType="off"
                   placeholder="What are you looking for?"
                   reference={inputRef}
                 />

@@ -14,9 +14,14 @@ function Category({image, name, icon, numListings}) {
         <Image style={{flex: 1, borderRadius: 7, opacity: 0.5}} uri={image} />
         <View style={styles.inner}>
             <MaterialCommunityIcons name={icon} size={80} color={globalColors.background1} />
+            {!icon &&
+              <View style={{height: 80}} />
+            }
             <View style={{height: 30}} />
             <Title color={globalColors.background1}>{name}</Title>
-            <SubTitle color={globalColors.text4}>{numListings} listings</SubTitle>
+            {numListings && 
+              <SubTitle color={globalColors.text4}>{numListings} listings</SubTitle>
+            }
         </View>
     </View>
   );

@@ -1,12 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import {View, FlatList, TouchableOpacity} from 'react-native';
 
-import globalStyles from '../../config/globalStyles';
-import globalColors from '../../config/globalColors';
-import styles from './styles';
-import functions from './functions';
-import Screen from '../../components/general/Screen';
-import TopBar from './TopBar';
+import appNav from '../../appNav';
 import Title from '../../components/text/Title';
 import NoConnection from '../../components/blocks/NoConnection';
 import NetInfo from '@react-native-community/netinfo';
@@ -20,8 +15,15 @@ function index({navigation, route}) {
   const fullData = useRef([]);
   const [refresh, setRefresh] = useState(false);
   const makeData = (newData) => {
-    setData(newData.slice(0, 6));
-    fullData.current = newData;
+    const Data = newData.sort((a,b)=> {
+      if (a.name > b.name) {
+        return 1;
+      } else {
+        return -1;
+      }
+    })
+    setData(Data.slice(0, 6));
+    fullData.current = Data;
   }
   const onRefresh = async () => {
     setRefresh(true);
@@ -80,8 +82,7 @@ function index({navigation, route}) {
     onInitial();
   }, [])
   return (
-    <Screen style={styles.page}>
-      <TopBar navigation={navigation} route={route}/>
+    <View>
       <FlatList 
         data={data != "Disconnected" ? data : [
           {
@@ -107,14 +108,14 @@ function index({navigation, route}) {
             )
           } else {
             return (
-              <TouchableOpacity onPress={()=>navigation.navigate("Listings", {mainCat: route.params.parent, backData: route.params.BackData, parent: {...item, icon: route.params.parent.icon}})}>
+              <TouchableOpacity onPress={()=>appNav.nav(navigation, route, "SubCats","Listings",{item: item})}>
                 <Category image={"https://www.bluebooklocal.com"+image} icon={route.params.parent.icon} name={item.name} numListings={item.count}/>
               </TouchableOpacity>
             )
           }
         }}
       />
-    </Screen>
+    </View>
   );
 }
 

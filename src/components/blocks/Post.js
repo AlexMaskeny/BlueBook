@@ -16,16 +16,18 @@ function Post({cover, name, icon, category, logo, content, id}) {
         <View style={styles.inner}>
             <Title style={{flex:1}} size={20} numberOfLines={1}>{name}</Title>
             {content.length > 0 &&
-                <SubTitle style={{flex:1}} size={16} numberOfLines={1}>{content}</SubTitle>
+                <SubTitle style={{flex:1}} size={16} numberOfLines={category ? 1 : 5}>{content}</SubTitle>
             }
+            {category &&            
             <View style={styles.category}>
                 <IconCircle color={globalColors.primary} icon={icon} width={50} size={36} />
                 <View style={{width: 10}} />
-                <SubTitle size={16} color={globalColors.text1}>{category}</SubTitle>
+                <SubTitle size={16} color={globalColors.text1} numberOfLines={2}>{category.replace("Physicians & Surgeons", "")}</SubTitle>
                 {/* <TouchableOpacity onPress={()=>console.log("Favorite" + id)} style={{flex: 1, alignItems: 'flex-end', justifyContent: 'center'}}>
                     <IconCircle color={globalColors.background4} icon="heart-outline" iconColor={globalColors.text2} width={36} size={22} />
                 </TouchableOpacity> */}
             </View>
+            }
         </View>
         {logo &&
             <Image style={{borderRadius: 100, height: 80, width: 80, position: "absolute", backgroundColor: globalColors.background1, borderColor: globalColors.background1, borderWidth: 3, left: 20, bottom: 120}} uri={logo} />

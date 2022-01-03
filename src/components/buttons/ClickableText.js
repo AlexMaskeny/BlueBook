@@ -4,14 +4,14 @@ import { TouchableOpacity } from 'react-native';
 import SubTitle from "../text/SubTitle";
 import Title from "../text/Title";
 
-function ClickableText({title, onPress, style, type, ...otherProps}) {
+function ClickableText({title, onPress, style, type, tStyle, ...otherProps}) {
   return (
         <TouchableOpacity style={style} onPress={onPress}>  
           {type=="subTitle" &&
-            <SubTitle {...otherProps}>{title}</SubTitle>
+            <SubTitle style={tStyle} {...otherProps}>{title}</SubTitle>
           }
           {type=="title" &&
-            <Title {...otherProps}>{title}</Title>
+            <Title style={tStyle} {...otherProps}>{title}</Title>
           }
         </TouchableOpacity>
   );

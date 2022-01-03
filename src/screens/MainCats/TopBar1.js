@@ -11,6 +11,14 @@ import SearchModal from './searchModal';
 
 function topBar({data, navigation, route}) {
   const [active, setActive] = useState(false);
+  useEffect(()=>{
+    if (route.params.search) {
+      if (!active) {
+        setActive(true);
+      }
+    }
+    route.params.search = false;
+  }, [route.params.search])
   return (
     <>    
     <View style={styles.topBar1}>
